@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}
+Update Process
+{% endblock %}
+
+{% block content %}
+<body class="text-center">
+<div class="container">
+<form method="post" class="form-register" style="color: white">
+    {{form.hidden_tag()}}
+    <h1 class="h3 mb-3 font-weight-normal">
+        Update Process
+    </h1>
+    <br>
+
+    {{form.name.label()}}
+    {{form.name(class="form-control", placeholder="Process Name")}}
+
+
+    {{form.duration.label()}}
+    {{form.duration(class="form-control", placeholder="Process Duration")}}
+
+    {{form.operators.label()}}
+    {{form.operators(class="form-control", placeholder="Operators Number")}}
+
+    {{ form.cycle_time.label(class="form-label") }}
+    {{ form.cycle_time(class="form-control", placeholder="Cycle Time") }}
+
+    {{ form.units_produced.label(class="form-label") }}
+    {{ form.units_produced(class="form-control", placeholder="Units Produced") }}
+
+    {{ form.setup_time.label(class="form-label") }}
+    {{ form.setup_time(class="form-control", placeholder="Setup Time") }}
+
+    {{ form.downtime.label(class="form-label") }}
+    {{ form.downtime(class="form-control", placeholder="Downtime") }}
+
+    <br>
+
+    {{form.submit(class="btn btn-lg btn-block btn-primary")}}
+
+</form>
+</div>
+</body>
+
+{% endblock %}

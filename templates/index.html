@@ -1,0 +1,180 @@
+{% extends 'base.html' %}
+{% block title %}
+Register Process
+{% endblock %}
+{% block content %}
+<style>
+    .table {
+    font-size: 16px;  /* Increase text size */
+    border-collapse: collapse; /* Remove double borders */
+}
+
+/* Add padding and center align text */
+th, td {
+    padding: 14px;  /* Add space inside cells */
+    text-align: center;  /* Center align */
+    vertical-align: middle; /* Keep content centered */
+}
+
+/* Improve header appearance */
+th {
+    background-color: #222;
+    color: white;
+    font-weight: bold;
+}
+
+/* Add spacing between table rows */
+.table tbody tr {
+    border-bottom: 2px solid #444;
+}
+
+.table-responsive {
+    overflow-x: auto;  /* Permite desplazamiento horizontal si es necesario */
+}
+
+ td .btn {
+    margin: 2px;
+}
+/* Button spacing */
+</style>
+<div class="container mt-4">
+    <h2>Process Database</h2>
+    <div class="row mb-3">
+        <div class="col-md-6">
+            <form method="POST" action="{{ url_for('process.create_table') }}">
+                <div class="input-group">
+                    <input type="text" name="table_name" class="form-control" placeholder="Enter Table Name" required>
+                    <button type="submit" class="btn btn-primary">Create Table</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form method="GET" action="{{ url_for('process.select_table') }}">
+                <div class="input-group">
+                    <select name="table_id" class="form-select" required>
+                        <option value="">-- Select a Table --</option>
+                        {% for table in tables %}
+                            <option value="{{ table.id }}"
+                             {% if selected_table and selected_table.id == table.id %}selected{% endif %}>
+                                {{ table.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <button type="submit" class="btn btn-info">Switch Table</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    {% if selected_table %}
+    <h3>Current Table: {{ selected_table.name }}</h3>
+    <form action="{{ url_for('process.delete_table', table_id=selected_table.id) }}" method="post">
+        <button type="submit" class="btn btn-danger btn-sm">Delete This Table</button>
+    </form>
+
+<div class="container-fluid">
+<div class="row mt-3">
+    <div class="col-md-3">
+        <div class="card p-3 bg-dark text-white">
+            <h3 class="mb-3">Add New Process</h3>
+            <form method="post">
+                {{ form.hidden_tag() }}
+
+                <div class="mb-3">
+                    {{ form.name.label(class="form-label") }}
+                    {{ form.name(class="form-control", placeholder="Process Name") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.duration.label(class="form-label") }}
+                    {{ form.duration(class="form-control", placeholder="Process Duration") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.operators.label(class="form-label") }}
+                    {{ form.operators(class="form-control", placeholder="Operators Number") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.cycle_time.label(class="form-label") }}
+                    {{ form.cycle_time(class="form-control", placeholder="Cycle Time") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.units_produced.label(class="form-label") }}
+                    {{ form.units_produced(class="form-control", placeholder="Units Produced") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.setup_time.label(class="form-label") }}
+                    {{ form.setup_time(class="form-control", placeholder="Setup Time") }}
+                </div>
+
+                <div class="mb-3">
+                    {{ form.downtime.label(class="form-label") }}
+                    {{ form.downtime(class="form-control", placeholder="Downtime") }}
+                </div>
+
+
+
+                {{ form.submit(class="btn btn-primary w-100") }}
+            </form>
+        </div>
+    </div>
+    <div class="col-md-9">
+    {% if selected_table %}
+    <h3> Total Efficiency of  {{ selected_table.name }}: {{ efficiency }}%</h3>
+    <form action="{{ url_for('process.efficiency_trend_svg') }}" method="GET" target="_blank">
+        <button type="submit" class="btn btn-primary">Show Efficiency Trend (SVG)</button>
+    </form>
+    {% else %}
+    <h3>Select a table to view efficiency.</h3>
+    {% endif %}
+    <div class="table-responsive">
+        <table class="table table-dark table-bordered table-hover w-100">
+            <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col">Operators</th>
+                    <th scope="col">Cycle Time</th>
+                    <th scope="col">Units Produced</th>
+                    <th scope="col">Setup Time</th>
+                    <th scope="col">Downtime</th>
+                    <th scope="col">Efficiency</th> 
+                    <th scope="col">Author</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for process in processes %}
+                    <tr>
+                        <td>{{ process.user_process_id }}</td>
+                        <td>{{ process.name }}</td>
+                        <td>{{ process.duration }}</td>
+                        <td>{{ process.operators }}</td>
+                        <td>{{ process.cycle_time }}</td>  <!-- ✅ Shows cycle time per process -->
+                        <td>{{ process.units_produced }}</td>
+                        <td>{{ process.setup_time }}</td>
+                        <td>{{ process.downtime }}</td>
+                        <td>{{ process_efficiencies[process.id] }}%</td>
+                        <td>{{process.author}}</td>
+                        <td>
+                            {% if process.user_id == user.id%}
+                            <a class="btn btn-success" href="{{ url_for('process.update', id=process.id) }}">Update</a>
+                            <a class="btn btn-danger" href="{{ url_for('process.delete_process', id=process.id) }}">Delete</a>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    </div>
+</div>
+    {% else %}
+    <p class="text-muted">No table selected. Please create or select a table to continue.</p>
+    {% endif %}
+</div>
+
+{% endblock %}
