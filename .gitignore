@@ -1,0 +1,33 @@
+# Ignore environment variables
+.env
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignore virtual environments
+venv/
+env/
+*.egg-info/
+
+# Ignore database files (if using SQLite locally)
+*.sqlite3
+instance/
+
+# Ignore logs
+logs/
+*.log
+
+# Ignore IDE/editor configurations
+.vscode/
+.idea/
+*.swp
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore Python dependencies installed by pip
+pip-log.txt
