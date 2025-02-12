@@ -10,4 +10,4 @@ database = os.getenv('MYSQL_DATABASE')
 port = os.getenv('MYSQL_PORT')
 
 
-DATABASE_CONNECTION_URI = f"mysql+pymysql://{user}:{password}@{host}:{port}/{database}"
+DATABASE_CONNECTION_URI = f"mysql://{user}:{password}@{host}:{port}/{database}"
