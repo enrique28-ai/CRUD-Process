@@ -1,6 +1,7 @@
 import nltk
 import numpy as np
-#nltk.download('punkt_tab')
+nltk.download('punkt_tab')
+nltk.download('punkt')
 #nltk.data.find('tokenizers/punkt')
 
 from nltk.stem.porter import PorterStemmer
