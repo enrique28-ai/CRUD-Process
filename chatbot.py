@@ -13,6 +13,12 @@ FILE = "data.pth"
 
 data = torch.load(FILE)
 
+try:
+    data = torch.load(FILE, map_location=torch.device('cpu'))
+except Exception as e:
+    print(f"[ERROR] Failed to load chatbot model: {e}")
+    raise
+
 input_size = data["input_size"]
 hidden_size = data["hidden_size"]
 output_size = data["output_size"]
