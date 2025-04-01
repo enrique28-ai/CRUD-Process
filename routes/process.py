@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, redirect, url_for, request, flash, session
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session, jsonify
 from forms.form_info import ProcessForm
 from utils.db import db
 from models.process_model import Process, Table
@@ -6,7 +6,7 @@ from flask_login import  login_required, current_user
 import matplotlib.pyplot as plt
 import io
 from flask import Response
-
+from chatbot import get_response
 
 process = Blueprint("process", __name__)
 
@@ -273,3 +273,10 @@ def efficiency_trend_svg():
         return redirect(url_for("process.index"))
 
     return generate_efficiency_time_series_svg(processes)
+
+@process.route("/predict", methods=["GET", "POST"])
+def predict():
+    text = request.get_json().get("message")
+    response = get_response(text)
+    message = {"answer": response}
+    return jsonify(message)
