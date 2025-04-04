@@ -1,0 +1,49 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": ["Hi", "Hey", "How are you", "Is anyone there?", "Hello", "Good day"],
+      "responses": ["Hey :-)", "Hello, thanks for visiting", "Hi there, what can I do for you?", "Hi there, how can I help?"]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": ["Bye", "See you later", "Goodbye"],
+      "responses": ["See you later, thanks for visiting", "Have a nice day", "Bye! Come back again soon."]
+    },
+    {
+      "tag": "thanks",
+      "patterns": ["Thanks", "Thank you", "That's helpful", "Thank's a lot!"],
+      "responses": ["Happy to help!", "Any time!", "My pleasure"]
+    },
+    {
+      "tag": "create_table",
+      "patterns": ["How can I create a table?", "I want to make a new table", "Add a table", "New table please"],
+      "responses": ["To create a new table, use the form at the top left of the dashboard and click 'Create Table'."]
+    },
+    {
+      "tag": "add_process",
+      "patterns": ["How do I add a new process?", "Where do I enter process data?", "Add a process", "Insert a process"],
+      "responses": ["You can add a new process using the form on the left side after selecting a table."]
+    },
+    {
+      "tag": "efficiency_help",
+      "patterns": ["How is efficiency calculated?", "What is process efficiency?", "Explain efficiency", "How do I interpret the efficiency value?"],
+      "responses": ["Efficiency is calculated using the formula: standard time (cycle time × units) divided by actual time (duration - setup - downtime) × operators, times 100."]
+    },
+    {
+      "tag": "delete_process_or_table",
+      "patterns": ["How do I delete a table?", "Can I remove a process?", "Delete a row", "Delete process"],
+      "responses": ["To delete a process or table, use the red 'Delete' buttons next to each item."]
+    },
+    {
+      "tag": "update_process",
+      "patterns": ["How can I update a process?", "Edit a process entry", "Change process values", "Update a row"],
+      "responses": ["Click the 'Update' button next to the process you want to modify."]
+    },
+    {
+      "tag": "efficiency_trend",
+      "patterns": ["How do I see the efficiency graph?", "Efficiency trend", "Show me the trend", "Graph of process efficiency"],
+      "responses": ["Click the 'Show Efficiency Trend (SVG)' button to see the efficiency chart for the selected table."]
+    }
+  ]
+}

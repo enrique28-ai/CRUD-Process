@@ -6,6 +6,7 @@ from flask_login import  login_required, current_user
 import matplotlib.pyplot as plt
 import io
 from flask import Response
+from chat import get_response
 
 process = Blueprint("process", __name__)
 
@@ -272,3 +273,11 @@ def efficiency_trend_svg():
         return redirect(url_for("process.index"))
 
     return generate_efficiency_time_series_svg(processes)
+
+@process.route("/predict", methods=["GET", "POST"])
+def predict():
+    if request.method == "POST":
+        text = request.get_json().get("message")
+        response = get_response(text)
+        message = {"answer": response}
+        return jsonify(message)
