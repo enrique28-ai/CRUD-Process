@@ -1,7 +1,8 @@
 class Chatbox {
     constructor() {
         this.args = {
-            openButton: document.querySelector('.chatbox__button'),
+            openButton: document.querySelector('.chatbox__button button'),
+            closeButton: document.querySelector('.chatbox__close'),
             chatBox: document.querySelector('.chatbox__support'),
             sendButton: document.querySelector('.send__button')
         }
@@ -11,9 +12,10 @@ class Chatbox {
     }
 
     display() {
-        const {openButton, chatBox, sendButton} = this.args;
+        const {openButton, closeButton, chatBox, sendButton} = this.args;
 
-        openButton.addEventListener('click', () => this.toggleState(chatBox))
+        openButton.addEventListener('click', () => this.openChat(chatBox))
+        closeButton.addEventListener('click', () => this.closeChat(chatBox))
 
         sendButton.addEventListener('click', () => this.onSendButton(chatBox))
 
@@ -25,15 +27,14 @@ class Chatbox {
         })
     }
 
-    toggleState(chatbox) {
-        this.state = !this.state;
+    openChat(chatbox) {
+        this.state = true;
+        chatbox.classList.add('chatbox--active')
+    }
 
-        // show or hides the box
-        if(this.state) {
-            chatbox.classList.add('chatbox--active')
-        } else {
-            chatbox.classList.remove('chatbox--active')
-        }
+    closeChat(chatbox) {
+        this.state = false;
+        chatbox.classList.remove('chatbox--active')
     }
 
     onSendButton(chatbox) {
