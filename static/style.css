@@ -26,6 +26,7 @@ body {
     bottom: 30px;
     right: 30px;
     z-index: 9999;
+    pointer-events: none;
 }
 
 /* CONTENT IS CLOSE */
@@ -42,19 +43,19 @@ body {
     transition: all .5s ease-in-out;
 }
 
-/* CONTENT ISOPEN */
+/* CONTENT IS OPEN */
 .chatbox--active {
     transform: translateY(-40px);
     z-index: 123456;
     opacity: 1;
     pointer-events: auto;
     visibility: visible;
-
 }
 
 /* BUTTON */
 .chatbox__button {
     text-align: right;
+    pointer-events: auto;
 }
 
 .send__button {
