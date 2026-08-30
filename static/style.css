@@ -37,6 +37,8 @@ body {
     height: 350px;
     z-index: -123456;
     opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
     transition: all .5s ease-in-out;
 }
 
@@ -45,6 +47,8 @@ body {
     transform: translateY(-40px);
     z-index: 123456;
     opacity: 1;
+    pointer-events: auto;
+    visibility: visible;
 
 }
 
