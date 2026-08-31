@@ -4,7 +4,7 @@ from wtforms.validators import Length, NumberRange, InputRequired
 
 class ProcessForm(FlaskForm):
     name = StringField(label='Process Name ', validators=[Length(min=2, max=30), InputRequired()])
-    duration = DecimalField(label='Duration ', validators=[NumberRange(min=0), InputRequired()])
+    duration = DecimalField(label='Duration (Seconds)', validators=[NumberRange(min=0), InputRequired()])
     operators = IntegerField(label='Number of Operators ', validators=[NumberRange(min=0), InputRequired()])
     cycle_time = DecimalField("Standard Cycle Time (Seconds)", validators=[NumberRange(min=0), InputRequired()])
     units_produced = IntegerField("Units Produced", validators=[NumberRange(min=0), InputRequired()])
