@@ -181,43 +181,48 @@ def calculate_efficiency(table_id):
     if not processes:
         return 0  # No processes = 0% efficiency
 
-    # ✅ Compute total standard time
-    total_standard_time = sum(p.cycle_time * p.units_produced for p in processes if calculate_process_efficiency(p) > 0)
+    # Process efficiency compares standard production time with net operating time.
+    # Operator count is retained as process metadata but is not part of this metric.
+    valid_processes = [
+        p for p in processes
+        if (p.duration - p.downtime - p.setup_time) > 0
+    ]
 
-    # ✅ Compute total actual time (excluding processes with 0% efficiency)
-    total_actual_time = sum(
-        (p.duration - p.downtime - p.setup_time) * p.operators
-        for p in processes if calculate_process_efficiency(p) > 0
+    if not valid_processes:
+        return 0
+
+    total_standard_time = sum(
+        p.cycle_time * p.units_produced
+        for p in valid_processes
+    )
+    total_operating_time = sum(
+        p.duration - p.downtime - p.setup_time
+        for p in valid_processes
     )
 
-    # ✅ Prevent division by zero
-    if total_actual_time <= 0:
-        return 0  
+    if total_operating_time <= 0:
+        return 0
 
-    # ✅ Compute Total Efficiency
-    total_efficiency = (total_standard_time / total_actual_time) * 100
+    total_efficiency = (total_standard_time / total_operating_time) * 100
 
-    # 🔹 Debugging: Print values to check calculation
     print(f"DEBUG - Table ID: {table_id}")
     print(f"DEBUG - Total Standard Time: {total_standard_time}")
-    print(f"DEBUG - Total Actual Time: {total_actual_time}")
+    print(f"DEBUG - Total Operating Time: {total_operating_time}")
     print(f"DEBUG - Computed Efficiency: {total_efficiency}")
 
     return round(total_efficiency, 2)
 
 def calculate_process_efficiency(process):
-    if not process or process.duration <= 0 or process.operators <= 0 or process.units_produced <= 0:
-        return 0  
-
-    # ✅ Consideramos downtime y setup time en el tiempo real
-    total_actual_time = (process.duration - process.downtime - process.setup_time) * process.operators
-    standard_time = process.cycle_time * process.units_produced
-
-    # ✅ Prevenir valores negativos o cálculos incorrectos
-    if total_actual_time <= 0:
+    if not process or process.duration <= 0 or process.units_produced <= 0:
         return 0
 
-    efficiency = (standard_time / total_actual_time) * 100
+    net_operating_time = process.duration - process.downtime - process.setup_time
+    standard_time = process.cycle_time * process.units_produced
+
+    if net_operating_time <= 0:
+        return 0
+
+    efficiency = (standard_time / net_operating_time) * 100
 
     return round(efficiency, 2)
 
@@ -238,8 +243,9 @@ def generate_efficiency_time_series_svg(processes):
     ax.set_ylabel("Efficiency (%)", fontsize=12)
     ax.set_title("Efficiency Trend Per Process", fontsize=14, fontweight='bold')
     
-    # Set Y-axis limit to avoid values above 100% (if needed)
-    ax.set_ylim(0, 110)
+    # Keep the chart readable while allowing valid efficiencies above 100%.
+    max_efficiency = max(efficiencies, default=100)
+    ax.set_ylim(0, max(110, max_efficiency * 1.1))
 
     # Grid for better readability
     ax.grid(True, linestyle='--', alpha=0.6)
