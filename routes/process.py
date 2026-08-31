@@ -40,7 +40,6 @@ def index():
             user_process_id=next_user_process_id,
             name=form.name.data,
             duration=form.duration.data,
-            operators=form.operators.data,
             cycle_time=form.cycle_time.data,
             units_produced=form.units_produced.data,
             setup_time=form.setup_time.data,
@@ -104,7 +103,7 @@ def delete_table(table_id):
         flash(f"Table '{table.name}' deleted!", category="success")
         session.pop("selected_table_id", None)  # Remove selected table
     else:
-        flash(f"Table '{table.name}' could not be deleted!", category="danger")
+        flash("Table could not be deleted!", category="danger")
     return redirect(url_for("process.index"))
 
     
@@ -117,7 +116,6 @@ def update(id):
         if request.method == "POST" and form.validate_on_submit():
             process_1.name = form.name.data
             process_1.duration = form.duration.data
-            process_1.operators = form.operators.data
             process_1.cycle_time = form.cycle_time.data
             process_1.units_produced  = form.units_produced.data
             process_1.setup_time = form.setup_time.data
@@ -182,7 +180,6 @@ def calculate_efficiency(table_id):
         return 0  # No processes = 0% efficiency
 
     # Process efficiency compares standard production time with net operating time.
-    # Operator count is retained as process metadata but is not part of this metric.
     valid_processes = [
         p for p in processes
         if (p.duration - p.downtime - p.setup_time) > 0
@@ -230,7 +227,7 @@ def generate_efficiency_time_series_svg(processes):
 
     # Extract process names and efficiencies
     process_names = [process.name for process in processes]
-    efficiencies = [calculate_process_efficiency(process) for process in processes]  # ✅ Ensure efficiency is always calculated
+    efficiencies = [calculate_process_efficiency(process) for process in processes]
 
     # Create the figure and axis
     fig, ax = plt.subplots(figsize=(8, 5))
